@@ -13,7 +13,7 @@
         </el-header>
         <el-container>
             <el-aside width="30%">
-                <el-menu default-active="1" background-color="#F3F4F6">
+                <el-menu default-active="1"  @select="getdocter" background-color="#F3F4F6">
                     <el-menu-item index="1">
                         <span slot="title">导航一</span>
                     </el-menu-item>
@@ -37,16 +37,16 @@
                     </el-menu-item>
                 </el-menu>
             </el-aside>
-            <el-main>
+            <el-main v-loading="dataListLoading">
                 <el-row :gutter="10">
-                    <div class="block" v-for="fit in fits" :key="fit">
+                    <div class="block" v-for="name in names" :key="name">
                         <el-col :xs="12" :sm="8" :md="8">
                             <el-image :src="url" fit="fill">
                                 <div slot="error" class="image-slot">
                                     <i class="el-icon-picture-outline"></i>
                                 </div>
                             </el-image>
-                            <span class="demonstration">test</span>
+                            <span class="demonstration">{{name}}</span>
                         </el-col>
                     </div>
                 </el-row>
@@ -59,8 +59,24 @@
     export default {
         data() {
             return {
-                fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
-                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+                names: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+                dataListLoading: false,
+                search:'',
+            }
+        },
+        methods: {
+            getdocter(){
+                this.dataListLoading=true
+                this.$http({
+                    url: this.$http.adornUrl('test'),
+                    method: 'get'
+                }).then(({data}) => {
+                    if (data && data.code === 200) {
+                        this.$message.success("111")
+                    }
+                    this.dataListLoading = false
+                })
             }
         }
     };
