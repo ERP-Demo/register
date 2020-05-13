@@ -13,40 +13,22 @@
         </el-header>
         <el-container>
             <el-aside width="30%">
-                <el-menu default-active="1"  @select="getdocter" background-color="#F3F4F6">
+                <el-menu default-active="1"  @select="getdocter" background-color="#F3F4F6" v-for="department in departments" :key="department">
                     <el-menu-item index="1">
-                        <span slot="title">导航一</span>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                        <span slot="title">导航二</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                        <span slot="title">导航三</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                        <span slot="title">导航四</span>
-                    </el-menu-item>
-                    <el-menu-item index="5">
-                        <span slot="title">导航五</span>
-                    </el-menu-item>
-                    <el-menu-item index="6">
-                        <span slot="title">导航六</span>
-                    </el-menu-item>
-                    <el-menu-item index="7">
-                        <span slot="title">导航七</span>
+                        <span slot="title">{{department.departmentName}}</span>
                     </el-menu-item>
                 </el-menu>
             </el-aside>
             <el-main v-loading="dataListLoading">
                 <el-row :gutter="10">
-                    <div class="block" v-for="name in names" :key="name">
+                    <div class="block" v-for="user in users" :key="user">
                         <el-col :xs="12" :sm="8" :md="8">
-                            <el-image :src="url" fit="fill">
+                            <el-image :src="user.photoUrl" fit="fill">
                                 <div slot="error" class="image-slot">
                                     <i class="el-icon-picture-outline"></i>
                                 </div>
                             </el-image>
-                            <span class="demonstration">{{name}}</span>
+                            <span class="demonstration">{{user.username}}</span>
                         </el-col>
                     </div>
                 </el-row>
@@ -59,21 +41,44 @@
     export default {
         data() {
             return {
-                names: ['fill', 'contain', 'cover', 'none', 'scale-down'],
-                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+                departments:[],
+                users:[],
                 dataListLoading: false,
                 search:'',
             }
         },
+        created() {
+            this.init()
+        },
         methods: {
-            getdocter(){
-                this.dataListLoading=true
+            init(){
                 this.$http({
-                    url: this.$http.adornUrl('test'),
+                    url: this.$http.adornUrl('/users_department/Department/allDepartment'),
                     method: 'get'
                 }).then(({data}) => {
                     if (data && data.code === 200) {
-                        this.$message.success("111")
+                        this.departments = data.departments
+                        this.users = data.users
+                    } else {
+                        this.departments = [],
+                        this.users = []
+                    }
+                    this.dataListLoading = false
+                })
+            },
+            getUser(did){
+                this.users=[]
+                this.$http({
+                    url: this.$http.adornUrl('/users_department/Department/getUser'),
+                    method: 'post',
+                    params: this.$http.adornParams({
+                        'did':did
+                    })
+                }).then(({data}) => {
+                    if (data && data.code === 200) {
+                        this.users = data.users
+                    } else {
+                        this.users = []
                     }
                     this.dataListLoading = false
                 })
