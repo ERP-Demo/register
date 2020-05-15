@@ -13,15 +13,15 @@
         </el-header>
         <el-container>
             <el-aside width="30%">
-                <el-menu default-active="1"  @select="getdocter" background-color="#F3F4F6" v-for="department in departments" :key="department">
-                    <el-menu-item index="1">
+                <el-menu :default-active="active"  background-color="#F3F4F6" v-for="(department,i) in departments" :key="i">
+                    <el-menu-item :index="department.departmentId.toString()" @click="getUser(department.departmentId)">
                         <span slot="title">{{department.departmentName}}</span>
                     </el-menu-item>
                 </el-menu>
             </el-aside>
             <el-main v-loading="dataListLoading">
                 <el-row :gutter="10">
-                    <div class="block" v-for="user in users" :key="user">
+                    <div class="block" v-for="(user,i) in users" :key="i">
                         <el-col :xs="12" :sm="8" :md="8">
                             <el-image :src="user.photoUrl" fit="fill">
                                 <div slot="error" class="image-slot">
@@ -45,6 +45,7 @@
                 users:[],
                 dataListLoading: false,
                 search:'',
+                active: ''
             }
         },
         created() {
@@ -52,12 +53,14 @@
         },
         methods: {
             init(){
+                this.dataListLoading=true
                 this.$http({
                     url: this.$http.adornUrl('/users_department/Department/allDepartment'),
                     method: 'get'
                 }).then(({data}) => {
                     if (data && data.code === 200) {
                         this.departments = data.departments
+                        this.active=data.departments[0].departmentId+''
                         this.users = data.users
                     } else {
                         this.departments = [],
@@ -67,6 +70,8 @@
                 })
             },
             getUser(did){
+                this.active=did+''
+                this.dataListLoading=true
                 this.users=[]
                 this.$http({
                     url: this.$http.adornUrl('/users_department/Department/getUser'),
