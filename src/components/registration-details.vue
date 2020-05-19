@@ -1,54 +1,39 @@
 <template>
     <div class="mod-config">
+        <el-page-header @back="callBack" content="详情页面">
+        </el-page-header>
         <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="getDataList()"
                  label-width="90px" style="margin-top: 40px">
-
-            <el-form-item label="名称" prop="patientName">
-                <el-input placeholder="患者名称" v-model="dataForm.patientName"
+            <el-form-item label="姓名" prop="patientName">
+                <el-input placeholder="请输入姓名" v-model="dataForm.patientName"
                           style="width: 250px;line-height: 50px"></el-input>
             </el-form-item>
 
-            <el-form-item label="患者性别" prop="patientSex">
+            <el-form-item label="性别" prop="patientSex">
                 <el-radio-group v-model="dataForm.patientSex" style="width: 250px;line-height: 50px;">
                     <el-radio label="男"></el-radio>
                     <el-radio label="女"></el-radio>
                 </el-radio-group>
             </el-form-item>
 
-            <el-form-item label="患者年龄" prop="patientAge">
-                <el-input placeholder="患者年龄" v-model="dataForm.patientAge"
+            <el-form-item label="年龄" prop="patientAge">
+                <el-input placeholder="请输入年龄" v-model="dataForm.patientAge"
                           style="width: 250px;line-height: 50px;"></el-input>
             </el-form-item>
 
-            <el-form-item label="身份证" prop="patientCartnum">
-                <el-input placeholder="身份证" v-model="dataForm.patientCartnum"
-                          style="width: 250px;line-height: 50px"></el-input>
-            </el-form-item>
-
-            <el-form-item label="患者电话" prop="patientPhone">
-                <el-input placeholder="患者电话" v-model="dataForm.patientPhone"
-                          style="width: 173px;line-height: 50px;"></el-input>
+            <el-form-item label="电话" prop="patientPhone">
+                <el-input placeholder="电话" v-model="dataForm.patientPhone"
+                          style="width: 124px;line-height: 50px;"></el-input>
                 <el-button type="primary" style="margin: 7px;" @click="getImageVerifyCode()">发送验证码</el-button>
             </el-form-item>
 
-            <el-form-item label="患者地址" prop="patientAddress">
-                <el-input placeholder="患者地址" v-model="dataForm.patientAddress"
+            <el-form-item label="地址" prop="patientAddress">
+                <el-input placeholder="请输入地址" v-model="dataForm.patientAddress"
                           style="width: 250px;line-height: 50px;"></el-input>
             </el-form-item>
 
-            <el-form-item label="科室" prop="departmentId">
-                <!--                <el-select placeholder="请选择" v-model="dataForm.departmentId" style="width: 250px;line-height: 50px;">-->
-                <!--                    <el-option-->
-                <!--                            v-for="item in dlist"-->
-                <!--                            :key="item.departmentId"-->
-                <!--                            :label="item.departmentName"-->
-                <!--                            :value="item.departmentId">-->
-                <!--                    </el-option>-->
-                <!--                </el-select>-->
-            </el-form-item>
-
-            <el-form-item label="患者备注" prop="patientNote">
-                <el-input placeholder="患者备注" v-model="dataForm.patientNote"
+            <el-form-item label="备注" prop="patientNote">
+                <el-input placeholder="请输入备注" v-model="dataForm.patientNote"
                           style="width: 250px;line-height: 50px;"></el-input>
             </el-form-item>
         </el-form>
@@ -104,7 +89,7 @@
                     patientSex: [{required: true, message: '性别不能为空', trigger: 'blur'}],
                     patientPhone: [{required: true, message: '电话不能为空', trigger: 'blur'}],
                     patientAddress: [{required: true, message: '地址不能为空', trigger: 'blur'}],
-                    patientNote: '',
+                    patientNote: [{required: true, message: '备注不能为空', trigger: 'blur'}],
                     registerCost: [{required: true, message: '挂号费用不能为空', trigger: 'blur'}],
                     departmentId: [{required: true, message: '科室不能为空', trigger: 'blur'}],
                     patientCartnum: [{required: true, message: '身份证不能为空', trigger: 'blur'}]
@@ -118,6 +103,12 @@
                 time:'',
                 dialogVisible: false,
                 left: 0
+            }
+        },
+        props: {
+            goBack: {  //定义一个外来方法
+                type: Function, //参数类型：函数
+                required: true //是否必填：是
             }
         },
         components: {
@@ -214,6 +205,9 @@
             },
             mousemove(width) {
                 this.left = width
+            },
+            callBack(){
+                this.$props.goBack()
             }
         }
     }

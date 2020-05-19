@@ -75,7 +75,10 @@ import {
   // Footer,
   Loading,
   MessageBox,
-  Message, Scrollbar,
+  Message,
+  Scrollbar,
+  Drawer,
+  PageHeader,
   // Notification,
 } from 'element-ui'
 
@@ -143,7 +146,9 @@ Vue.use(Aside)
 Vue.use(Main)
 // Vue.use(Footer)
 Vue.use(Scrollbar)
+Vue.use(Drawer)
 Vue.use(Image)
+Vue.use(PageHeader)
 
 Vue.use(Loading.directive)
 
